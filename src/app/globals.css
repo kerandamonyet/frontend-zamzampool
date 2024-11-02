@@ -44,3 +44,7 @@ body {
 .footer {
   @apply bg-gray-800 text-white text-center p-4;
 }
+
+.bg-white-form {
+  background-color: white;
+}
