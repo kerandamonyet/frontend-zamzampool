@@ -2,8 +2,13 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+require('dotenv').config();
 
 export default function LoginPage() {
+    const jwtSecret = process.env.JWT_SECRET;
+    const MySwal = withReactContent(Swal)
     const [formState, setFormState] = useState({ email: '', password: '' });
     const [errors, setErrors] = useState({});
     const [pending, setPending] = useState(false);
@@ -31,8 +36,15 @@ export default function LoginPage() {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             setPending(false);
+             // Menampilkan alert error jika ada error dalam form
+             MySwal.fire({
+                icon: 'error',
+                title: 'Form tidak lengkap',
+                text: 'Harap lengkapi semua field yang diperlukan',
+            });
             return;
         }
+        
 
         const requestData = {
             email: formState.email,
@@ -51,14 +63,26 @@ export default function LoginPage() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Login successful:', data);
-                localStorage.setItem('token', data.token); // Simpan token JWT
+                localStorage.setItem('jwt token', data.jwtSecret); // Assuming 'token' is the key
                 router.push('/admin/dashboard'); // Redirect to /dashboard
             } else {
                 const errorData = await response.json();
                 setErrors(errorData.errors || { general: 'Login failed' });
+                // Menampilkan alert error jika response dari server tidak berhasil
+                MySwal.fire({
+                    icon: 'error',
+                    title: 'Gagal Submit',
+                    text: errorData.message || 'Terjadi kesalahan saat memproses data Anda',
+                });
             }
         } catch (error) {
             console.error('Error logging in:', error);
+            // Menampilkan alert error jika terjadi kesalahan jaringan atau server
+            MySwal.fire({
+                icon: 'error',
+                title: 'Network Error',
+                text: 'Tidak dapat terhubung ke server. Coba lagi nanti.',
+            });
             setErrors({ general: 'Network error' });
         } finally {
             setPending(false);
@@ -134,7 +158,7 @@ export default function LoginPage() {
                             className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             disabled={pending}
                         >
-                            Login
+                            {pending ? 'Logging in...' : 'Login'}
                         </button>
                     </div>
                 </form>
