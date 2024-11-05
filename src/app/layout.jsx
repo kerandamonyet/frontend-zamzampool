@@ -55,9 +55,6 @@ export default function RootLayout({ children }) {
                 <Link href="/tentang-kami" className="text-sm font-semibold leading-6 text-gray-900">Tentang Kami</Link>
                 <Link href="/tiket-online" className="text-sm font-semibold leading-6 text-gray-900">Tiket Online</Link>
               </div>
-              <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                <Link href="/admin/login" className="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></Link>
-              </div>
             </nav>
 
             {mobileMenuOpen && (
@@ -94,9 +91,6 @@ export default function RootLayout({ children }) {
                         <Link href="/fasilitas" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Fasilitas</Link>
                         <Link href="/tentang-kami" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Tentang Kami</Link>
                         <Link href="/tiket-online" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Tiket Online</Link>
-                      </div>
-                      <div className="py-6">
-                        <Link href="/admin/login" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</Link>
                       </div>
                     </div>
                   </div>

@@ -1,48 +1,63 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import useRouter
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 export default function TicketOnlinePage() {
-    const MySwal = withReactContent(Swal)
+    const MySwal = withReactContent(Swal);
 
     const [formState, setFormState] = useState({
         fullName: '',
         email: '',
         phone: '',
-        ticket_count: 1, // Initialize ticket count
+        ticket_count: 0, // Initialize ticket count
         entry_date: '',
         ticket_type: ''
     });
-    
+
     const [value, onChange] = useState(new Date());
     const [totalPrice, setTotalPrice] = useState(0); // State to hold the total price
     const [errors, setErrors] = useState({});
     const [pending, setPending] = useState(false);
     const [datepickerInitialized, setDatepickerInitialized] = useState(false);
-    const router = useRouter(); // Initialize useRouter
 
     const TICKET_PRICES = {
         premium: 30000, // Price for premium ticket
         reguler: 18000  // Price for regular ticket
     };
 
+    useEffect(() => {
+        if (formState.ticket_type) {
+            calculateTotalPrice(formState.ticket_type, formState.ticket_count);
+        }
+    }, [formState.ticket_type, formState.ticket_count]);
+
+    const handleChangeTypeTicket = (ticketType) => {
+        setFormState((prev) => ({
+            ...prev,
+            ticket_type: ticketType,
+        }));
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormState((prev) => ({ ...prev, [name]: value }));
-        calculateTotalPrice(value, formState.ticket_count); // Recalculate total price
+        setFormState((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
     const handleTicketCountChange = (delta) => {
-        setFormState((prev) => ({
-            ...prev,
-            ticket_count: Math.max(1, prev.ticket_count + delta)
-        }));
-        calculateTotalPrice(formState.ticket_type, formState.ticket_count + delta); // Recalculate total price
+        setFormState((prev) => {
+            const newCount = Math.max(1, prev.ticket_count + delta);
+            return {
+                ...prev,
+                ticket_count: newCount,
+            };
+        });
     };
 
     const calculateTotalPrice = (ticketType, ticketCount) => {
@@ -58,7 +73,7 @@ export default function TicketOnlinePage() {
         e.preventDefault();
         setPending(true);
         setErrors({});
-    
+
         let newErrors = {};
         if (!formState.fullName) newErrors.fullName = 'Full Name is required';
         if (!formState.email) newErrors.email = 'Email is required';
@@ -70,7 +85,7 @@ export default function TicketOnlinePage() {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             setPending(false);
-    
+
             // Menampilkan alert error jika ada error dalam form
             MySwal.fire({
                 icon: 'error',
@@ -79,7 +94,7 @@ export default function TicketOnlinePage() {
             });
             return;
         }
-    
+
         const formattedDate = value.toISOString().split('T')[0];
         const requestData = {
             name: formState.fullName,
@@ -90,23 +105,46 @@ export default function TicketOnlinePage() {
             ticket_count: formState.ticket_count,
             gross_amount: totalPrice
         };
-        
+
         try {
-            const response = await fetch('http://localhost:5000/api/tickets/', {
+            const response = await fetch(`http://localhost:5000/api/tickets/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(requestData),
+                body: JSON.stringify(requestData)
             });
-    
+
             if (response.ok) {
                 const data = await response.json();
-                window.location.href = data.data.redirect_url;
+                // Redirect to Midtrans Snap for payment
+                window.snap.pay(data.transaction_token, {
+                    onSuccess: (result) => {
+                        console.log('Payment success:', result);
+                        // Redirect to success page or perform other actions
+                        window.location.href = '/tiket-online/pembayaran-berhasil';
+
+                    },
+                    onPending: (result) => {
+                        console.log('Payment pending:', result);
+                        // Handle pending state if needed
+
+                    },
+                    onError: (result) => {
+                        console.error('Payment error:', result);
+                        // Handle error state if needed
+                        window.location.href = '/tiket-online/pembayaran-gagal';
+                    },
+                    onClose: () => {
+                        console.log('Payment popup closed');
+                        // Handle popup close if needed
+
+                    }
+                });
             } else {
                 const errorData = await response.json();
-                setErrors(errorData.errors || { general: 'Checkout failed' });
-    
+                setErrors({ general: 'Checkout failed' });
+            
                 // Menampilkan alert error jika response dari server tidak berhasil
                 MySwal.fire({
                     icon: 'error',
@@ -114,6 +152,7 @@ export default function TicketOnlinePage() {
                     text: errorData.message || 'Terjadi kesalahan saat memproses data Anda',
                 });
             }
+            
         } catch (error) {
             // Menampilkan alert error jika terjadi kesalahan jaringan atau server
             MySwal.fire({
@@ -126,7 +165,7 @@ export default function TicketOnlinePage() {
             setPending(false);
         }
     };
-    
+
     // Initialize datepicker in useEffect
     useEffect(() => {
         if (typeof document !== 'undefined' && !datepickerInitialized) {
@@ -135,6 +174,23 @@ export default function TicketOnlinePage() {
             setDatepickerInitialized(true);
         }
     }, [datepickerInitialized]);
+
+    // Load Midtrans Snap script
+    useEffect(() => {
+        const snapScript = 'https://app.sandbox.midtrans.com/snap/snap.js';
+        const clientKey = process.env.MIDTRANS_CLIENT_KEY;
+        const script = document.createElement('script');
+
+        script.src = snapScript;
+        script.setAttribute('data-client-key', clientKey);
+        script.async = true;
+
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
 
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-gray-50">
@@ -146,9 +202,11 @@ export default function TicketOnlinePage() {
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm bg-white shadow-md rounded-lg p-8">
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <h3 className="mb-4 text-left text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                        Detail Tagihan
-                    </h3>
+                    <div className='bg-gradient-to-r from-cyan-500 to-blue-500 p-4 rounded'>
+                        <h3 className="text-left text-2xl font-bold leading-9 tracking-tight text-white">
+                            Detail Tagihan
+                        </h3>
+                    </div>
 
                     {/* Full Name */}
                     <div>
@@ -162,6 +220,7 @@ export default function TicketOnlinePage() {
                                 type="text"
                                 required
                                 value={formState.fullName}
+                                placeholder='Budiono Siregar'
                                 onChange={handleChange}
                                 className={`block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 
                                             ${errors.fullName ? 'ring-red-500' : 'ring-gray-300'} focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm`}
@@ -181,6 +240,7 @@ export default function TicketOnlinePage() {
                                 name="email"
                                 type="email"
                                 required
+                                placeholder='example@gmail.com'
                                 autoComplete="email"
                                 value={formState.email}
                                 onChange={handleChange}
@@ -202,6 +262,7 @@ export default function TicketOnlinePage() {
                                 name="phone"
                                 type="text" // Changed to 'text' to allow leading zero
                                 required
+                                placeholder='08xxxxxxxx'
                                 value={formState.phone}
                                 onChange={handleChange}
                                 className={`block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 
@@ -230,19 +291,27 @@ export default function TicketOnlinePage() {
                         <label htmlFor="ticket_type" className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-medium leading-6 text-gray-900">
                             Jenis Tiket
                         </label>
-                        <select
-                            id="ticket_type"
-                            name="ticket_type"
-                            required
-                            value={formState.ticket_type}
-                            onChange={handleChange}
-                            className={`block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 
-                                        ${errors.ticket_type ? 'ring-red-500' : 'ring-gray-300'} focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm`}
-                        >
-                            <option value="">Select ticket type</option>
-                            <option value="premium">Premium</option>
-                            <option value="reguler">Reguler</option>
-                        </select>
+                        <div className="flex space-x-2 mt-3">
+                            <button
+                                type="button"
+                                className={`flex-1 py-1.5 px-3 rounded-md shadow-sm ${
+                                    formState.ticket_type === 'premium' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-900 border'
+                                }`}
+                                onClick={() => handleChangeTypeTicket('premium')}
+                            >
+                                Premium
+                            </button>
+                            <button
+                                type="button"
+                                className={`flex-1 py-1.5 px-3 rounded-md shadow-sm ${
+                                    formState.ticket_type === 'reguler' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-900 border'
+                                }`}
+                                onClick={() => handleChangeTypeTicket('reguler')}
+                            >
+                                Reguler
+                            </button>
+                        </div>
+                        <input type="hidden" name="ticket_type" value={formState.ticket_type} />
                         {errors.ticket_type && <p className="text-red-600 mt-2">{errors.ticket_type}</p>}
                     </div>
 
@@ -294,13 +363,12 @@ export default function TicketOnlinePage() {
                             className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm 
                                         ${pending ? 'opacity-50 cursor-not-allowed' : ''} hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
                         >
-                            {pending ? 'Processing...' : 'Checkout'}
+                            {pending ? 'Processing...' : 'Bayar Sekarang'}
                         </button>
                     </div>
 
                     {/* Display General Errors */}
                     {errors.general && <p className="text-red-600 mt-2">{errors.general}</p>}
-
                 </form>
             </div>            
         </div>
