@@ -1,0 +1,43 @@
+.alive-min {
+    box-shadow: #db4141 0 10px;
+}
+.alive-plus {
+    box-shadow: #1a8863 0 10px;
+}
+.alive-submit {
+    box-shadow: #3b49c7 0 10px;
+}
+.alive-klaim {
+    box-shadow: #1a8863 0 10px;
+}
+.alive-back {
+    box-shadow: #3b49c7 0 10px;
+}
+.alive-maps {
+    box-shadow: #be9605 0 10px;
+}
+
+
+.alive-min:active {
+    box-shadow: #db4141 0 5px;
+}
+.alive-plus:active {
+    box-shadow: #1b936b 0 5px;
+}
+.alive-submit:active {
+    box-shadow: #3b49c7 0 5px;
+}
+.alive-klaim:active {
+    box-shadow: #1a8863 0 5px;
+}
+.alive-back:active {
+    box-shadow: #3b49c7 0 5px;
+}
+.alive-maps:active {
+    box-shadow: #be9605 0 5px;
+}
+
+
+.alive:active {
+    transform: translateY(5px);
+  }

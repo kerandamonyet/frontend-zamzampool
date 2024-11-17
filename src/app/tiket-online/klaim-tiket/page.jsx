@@ -7,13 +7,14 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
-export default function SuccessPaymentPage() {
+export default function ClaimTicketPage() {
   const MySwal = withReactContent(Swal);
   const [formState, setFormState] = useState({
     orderId: "",
   });
   const [pending, setPending] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isAgreementChecked, setIsAgreementChecked] = useState(false); // New state to track the radio button
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,6 +24,10 @@ export default function SuccessPaymentPage() {
     }));
   };
 
+  const handleRadioChange = (e) => {
+    setIsAgreementChecked(e.target.checked); // Update state when radio button is clicked
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setPending(true);
@@ -30,6 +35,8 @@ export default function SuccessPaymentPage() {
 
     let newErrors = {};
     if (!formState.orderId) newErrors.orderId = "Order ID is required";
+    if (!isAgreementChecked)
+      newErrors.agreement = "Anda harus menyetujui Syarat dan Ketentuan"; // Check if radio button is clicked
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -88,18 +95,18 @@ export default function SuccessPaymentPage() {
   };
 
   return (
-    <div className="mt-5 flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className=" max-w-md w-full space-y-6 p-7 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+    <div className="mt-20 mb-10 flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-md w-full space-y-6 p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
         <div className="flex flex-col items-center">
-          <img src="/icon/berhasil.gif" alt="Tiket" className="h-20 w-20" />
+          <img src="/icon/tiket.gif" alt="Tiket" className="h-20 w-20" />
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mt-4">
-            Pembayaran Berhasil
+            Klaim Tiket
           </h1>
         </div>
         <div className="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-4">
           <div className="flex justify-between">
             <p className="text-gray-500 dark:text-gray-400 mt-2">
-              Terima Kasih atas pembayaran nya, silahkan masukan{" "}
+              Silahkan masukan{" "}
               <span className="font-bold text-black">ID Pesanan</span> berikut
               agar QR-code bisa dikirimkan ke email anda.
             </p>
@@ -130,11 +137,9 @@ export default function SuccessPaymentPage() {
                       value={formState.orderId}
                       onChange={handleChange}
                       className={`block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 
-                                                ${
-                                                  errors.orderId
-                                                    ? "ring-red-500"
-                                                    : "ring-gray-300"
-                                                } focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm`}
+                        ${
+                          errors.orderId ? "ring-red-500" : "ring-gray-300"
+                        } focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm`}
                     />
                   </td>
                 </tr>
@@ -147,29 +152,48 @@ export default function SuccessPaymentPage() {
                 </tr>
               </tbody>
             </table>
-            <p className="before:content-['*'] before:mr-0.5 before:text-red-500 text-gray-500 font-bold italic text-sm ">
-              ID Pesanan dapat dilihat pada Email Status Pembayaran
-            </p>
+
+            {/* section TermsAndCondition */}
             <TermsAndConditions />
+
+            {/* Radio-button Agreement TnC */}
+            <div className="flex items-center gap-x-3">
+              <input
+                id="accept-agreement"
+                name="accept-agreement"
+                type="radio"
+                className="h-4 w-4 border-gray-900 text-indigo-600 focus:ring-indigo-600"
+                onChange={handleRadioChange} // Handle radio change
+              />
+              <label
+                htmlFor="accept-agreement"
+                className="block text-sm/6 font-semibold italic text-gray-900"
+              >
+                Saya Setuju dengan Syarat dan Ketentuan
+              </label>
+            </div>
+            {errors.ticket_count && (
+              <p className="text-red-600 mt-2">{errors.ticket_count}</p>
+            )}
+
             {/* Button Submit */}
             <div className="mt-6">
               <button
                 type="submit"
-                disabled={pending}
-                className={`flex w-full justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm 
+                disabled={pending} // Disable button if radio button is not checked
+                className={`flex w-full justify-center rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm 
                                     ${
                                       pending
                                         ? "opacity-50 cursor-not-allowed"
                                         : "Kirim"
-                                    } hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+                                    } hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
               >
-                {pending ? "Processing..." : "Kirim"}
+                {pending ? "Processing..." : "Klaim Tiket"}
               </button>
             </div>
           </form>
         </div>
 
-        {/* TermsAndConditions */}
         {/* Link go to tiket online page */}
         <GoToTicketPageButton />
       </div>
