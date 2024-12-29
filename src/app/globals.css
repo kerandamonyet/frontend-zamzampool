@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Poppins;
+}
+
+/* Layout styles */
+.container {
+  @apply flex flex-col min-h-screen;
+}
+
+.header {
+  @apply bg-gray-800 text-white p-4;
+}
+
+.header nav ul {
+  @apply list-none flex gap-4 p-0 m-0;
+}
+
+.header nav a {
+  @apply text-white no-underline;
+}
+
+.main {
+  @apply flex-1 p-4;
+}
+
+.footer {
+  @apply bg-gray-800 text-white text-center p-4;
+}
+
+.bg-white-form {
+  background-color: white;
+}
