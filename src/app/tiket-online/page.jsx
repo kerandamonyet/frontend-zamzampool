@@ -58,8 +58,15 @@ export default function TicketOnlinePage() {
 
     let newErrors = {};
     if (!formState.fullName) newErrors.fullName = "Nama Lengkap wajib diisi.";
-    if (!formState.email) newErrors.email = "Email wajib diisi.";
-    if (!formState.phone) newErrors.phone = "Nomor WhatsApp wajib diisi.";
+    // if (!formState.email) newErrors.email = "Email wajib diisi.";
+    // if (!formState.phone) newErrors.phone = "Nomor WhatsApp wajib diisi.";
+    if (!/^[0-9]{10,13}$/.test(formState.phone)) {
+      newErrors.phone = "Nomor WhatsApp harus berupa angka dan valid.";
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email)) {
+      newErrors.email = "Format email tidak valid.";
+    }
+    
     if (!formState.ticket_type) newErrors.ticket_type = "Pilih jenis tiket.";
     if (!calendarDate) {
       newErrors.entry_date = "Tanggal masuk wajib diisi.";

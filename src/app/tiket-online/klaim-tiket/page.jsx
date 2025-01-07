@@ -95,7 +95,7 @@ export default function ClaimTicketPage() {
   };
 
   return (
-    <div className="mt-20 mb-10 flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="mt-0 mb-0 flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-md w-full space-y-6 p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
         <div className="flex flex-col items-center">
           <img src="/icon/tiket.gif" alt="Tiket" className="h-20 w-20" />
