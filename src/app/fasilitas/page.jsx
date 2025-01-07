@@ -16,7 +16,7 @@ export default function Fasilitas() {
       </header>
 
       <main className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 gap-y-10 gap lg:px-16 pb-12 max-w-[95%] mx-auto">
-        {/* Kafe & Are Makan */}
+        {/* Lounge VIP */}
         <div className="bg-white rounded-lg shadow-md">
           <Image
             src="/kafe-area-makan.png"
@@ -26,14 +26,14 @@ export default function Fasilitas() {
             className="rounded-t-lg"
           />
           <div className="p-4">
-            <h2 className="text-xl font-bold text-blue-600">Kafe & Are Makan</h2>
+            <h2 className="text-xl font-bold text-blue-600">Lounge VIP</h2>
             <p className="text-black mt-2">
-              Nikmati hidangan lezat dan minuman segar di kafe kami, dengan menu pilihan untuk memanjakan selera Anda.
+              Area eksklusif yang dilengkapi dengan tempat duduk santai, serta pemandangan kolam renang yang menenangkan.
             </p>
           </div>
         </div>
 
-        {/* Kolam Renang Utama */}
+        {/* Kolam Renang Premium */}
         <div className="bg-white rounded-lg shadow-md">
           <Image
             src="/kolam-renang-utama.png"
@@ -43,7 +43,7 @@ export default function Fasilitas() {
             className="rounded-t-lg"
           />
           <div className="p-4">
-            <h2 className="text-xl font-bold text-blue-600">Kolam Renang Utama</h2>
+            <h2 className="text-xl font-bold text-blue-600">Kolam Renang Premium</h2>
             <p className="text-gray-600 mt-2">
               Kolam renang luas dan bersih yang cocok untuk anak-anak hingga dewasa, dengan area dangkal dan dalam yang aman.
             </p>
@@ -60,14 +60,14 @@ export default function Fasilitas() {
             className="rounded-t-lg"
           />
           <div className="p-4">
-            <h2 className="text-xl font-bold text-blue-600">Area Relaksasi dan Tempat Duduk Umum</h2>
+            <h2 className="text-xl font-bold text-blue-600">Area Relaksasi Air Hangat</h2>
             <p className="text-gray-600 mt-2">
-              Tempat duduk di sekitar kolam renang untuk pengunjung beristirahat dan bersantai.
+              Kolam renang air hangat yang dapat membantu meredakan stress, mengendurkan otot dan meningkatkan sirkulasi darah.
             </p>
           </div>
         </div>
 
-        {/* Ruang Mandi & Shower */}
+        {/* Ruang Mandi & Ganti */}
         <div className="bg-white rounded-lg shadow-md">
           <Image
             src="/ruang-mandi-shower.png"
@@ -77,9 +77,9 @@ export default function Fasilitas() {
             className="rounded-t-lg"
           />
           <div className="p-4">
-            <h2 className="text-xl font-bold text-blue-600">Ruang Mandi & Shower</h2>
+            <h2 className="text-xl font-bold text-blue-600">Ruang Mandi & Ganti</h2>
             <p className="text-gray-600 mt-2">
-              Tempat duduk di sekitar kolam renang untuk pengunjung beristirahat dan bersantai.
+              Ruangan yang bersih dan nyaman sebagai prioritas utama serta tertutup untuk privasi maksimal.
             </p>
           </div>
         </div>
@@ -101,19 +101,19 @@ export default function Fasilitas() {
           </div>
         </div>
 
-        {/* Ruang Ganti */}
+        {/* Kantin */}
         <div className="bg-white rounded-lg shadow-md">
           <Image
-            src="/ruang-ganti.png"
-            alt="Ruang Ganti"
+            src="/kantin.png"
+            alt="Kantin"
             width={400}
             height={200}
             className="rounded-t-lg"
           />
           <div className="p-4">
-            <h2 className="text-xl font-bold text-blue-600">Ruang Ganti</h2>
+            <h2 className="text-xl font-bold text-blue-600">Kantin</h2>
             <p className="text-gray-600 mt-2">
-              Ruang ganti nyaman dengan shower, loker, dan ruang bersih untuk privasi maksimal.
+              Tempat yang nyaman untuk menikmati hidangan ringan dan minuman segar setelah berenang. Menyediakan beraga camilan, makanan berat hingga minuman dingin.
             </p>
           </div>
         </div>
@@ -138,16 +138,16 @@ export default function Fasilitas() {
         {/* Loket Tiket */}
         <div className="bg-white rounded-lg shadow-md">
           <Image
-            src="/loket-tiket.png"
-            alt="Loket Tiket & Cashless Payment"
+            src="/happynos.png"
+            alt="Happynos"
             width={400}
             height={200}
             className="rounded-t-lg"
-          />
+          />h
           <div className="p-4">
-            <h2 className="text-xl font-bold text-blue-600">Loket Tiket & Cashless Payment</h2>
+            <h2 className="text-xl font-bold text-blue-600">Happynos Coffee Shop</h2>
             <p className="text-gray-600 mt-2">
-              Tiket Counter cepat dan ramah, menyediakan tiket reguler dan premium dengan opsi pembayaran digital. Pesan online untuk lebih praktis.
+              Menghadirkan pengalaman ngopi yang istimewa dengan kopi premium, tempat ini cocok untuk bersantai setelah berenang.
             </p>
           </div>
         </div>

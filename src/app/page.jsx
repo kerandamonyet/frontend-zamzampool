@@ -83,15 +83,17 @@ export default function HomePage() {
               </p>
               <ul className="list-disc list-inside text-black mb-4">
                 <li>Akses Kolam Renang Utama</li>
-                <li>Akses Area Bermain Anak</li>
-                <li>Ruang Ganti Standar</li>
-                <li>Fasilitas Shower Standar</li>
+                <li>Kantin</li>
+                <li>Ruang Mandi & Ganti Standar</li>
+                <li>Mushola</li>
+                <li>Tempat Duduk Umum</li>
+                <li>Terapi Ikan</li>
               </ul>
             </div>
             <Link
               href="/tiket-online"
               passHref
-              className="bg-[#026EE8] text-white font-semibold py-2 px-4 rounded-lg mt-4 shadow hover:bg-blue-700 w-full max-w-md"
+              className="bg-[#026EE8] text-white font-semibold py-2 text-center px-4 rounded-lg mt-4 shadow hover:bg-blue-700 w-full max-w-md"
             >
               Rp. 18.000,-
             </Link>
@@ -107,16 +109,18 @@ export default function HomePage() {
                 yang memiliki fasilitas, diantaranya:
               </p>
               <ul className="list-disc list-inside text-black mb-4">
-                <li>Akses Kolam Renang Utama</li>
-                <li>Akses Ke Lounge VIP untuk Bersantai</li>
-                <li>Area Relaksasi Eksklusif</li>
-                <li>Wi-Fi Gratis untuk Area Lounge VIP</li>
+                <li>Akses Kolam Renang VIP</li>
+                <li>Akses Ke Lounge VIP</li>
+                <li>Akses Kolam Renang Air Hangat</li>
+                <li>Ruang Mandi & Ruang Ganti Premium</li>
+                <li>Akses Happynos Coffee Shop</li>
+                <li>Akses VIP Room</li>
               </ul>
             </div>
             <Link
               href="/tiket-online"
               passHref
-              className="bg-[#026EE8] text-white font-semibold py-2 px-4 rounded-lg mt-4 shadow hover:bg-blue-700 w-full max-w-md"
+              className="bg-[#026EE8] text-white font-semibold text-center py-2 px-4 rounded-lg mt-4 shadow hover:bg-blue-700 w-full max-w-md"
             >
               Rp. 30.000
             </Link>
